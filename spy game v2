@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cold War Spy Adventure</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        .game-container {
+            margin-top: 50px;
+            display: none;
+        }
+
+        .game-message {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        .game-result {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .game-result.success {
+            color: #27ae60;
+        }
+
+        .game-result.failure {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cold War Spy Adventure</h1>
+    <button id="startBtn">Start Mission</button>
+
+    <div class="game-container">
+        <p class="game-message" id="gameMessage">Your mission is to infiltrate the enemy base and retrieve classified information. Are you ready?</p>
+        <button id="option1Btn">Begin Mission</button>
+    </div>
+
+    <script>
+        document.getElementById('startBtn').addEventListener('click', function() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.querySelector('.game-container').style.display = 'block';
+        });
+
+        document.getElementById('option1Btn').addEventListener('click', function() {
+            gameStep1();
+        });
+
+        function gameStep1() {
+            document.getElementById('gameMessage').textContent = "You arrive at the enemy base. Do you want to go in through the front gate or sneak around the back?";
+            document.getElementById('option1Btn').textContent = "Go through the front gate";
+            document.getElementById('option1Btn').onclick = function() { gameStep2('front'); };
+            
+            let option2Btn = document.createElement('button');
+            option2Btn.textContent = "Sneak around the back";
+            option2Btn.onclick = function() { gameStep2('back'); };
+            document.body.appendChild(option2Btn);
+        }
+
+        function gameStep2(entrance) {
+            document.getElementById('gameMessage').textContent = "You've chosen to " + (entrance === 'front' ? "go through the front gate." : "sneak around the back.");
+            document.getElementById('option1Btn').style.display = 'none';
+            
+            let option2Btn = document.querySelector('button:nth-of-type(2)');
+            option2Btn.style.display = 'none';
+            
+            if (entrance === 'front') {
+                document.getElementById('gameMessage').textContent += " You are immediately caught by enemy agents!";
+                displayResult('failure');
+            } else {
+                document.getElementById('gameMessage').textContent += " You successfully sneak inside.";
+                displayResult('success');
+            }
+        }
+
+        function displayResult(result) {
+            let resultMessage = document.createElement('p');
+            resultMessage.classList.add('game-result');
+            resultMessage.classList.add(result);
+            resultMessage.textContent = result === 'success' ? "Mission Successful!" : "Mission Failed!";
+            document.body.appendChild(resultMessage);
+        }
+    </script>
+
+</body>
+</html>
