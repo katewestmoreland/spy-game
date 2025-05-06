@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent X: Operation Iron Curtain</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #0f0;
+      padding: 20px;
+    }
+    #game-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .player-select, .story, .choices {
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #0f0;
+      color: #111;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #0c0;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <h1>Agent X: Operation Iron Curtain</h1>
+    <div id="intro" class="player-select">
+      <p>Choose your role (1 per player):</p>
+      <ul>
+        <li><strong>Agent Blaze</strong> (CIA - field operative)</li>
+        <li><strong>Agent Vesper</strong> (KGB - double agent)</li>
+        <li><strong>Agent Cipher</strong> (MI6 - code analyst)</li>
+        <li><strong>Agent Echo</strong> (German informant - local access)</li>
+      </ul>
+      <button onclick="startGame()">Start Mission</button>
+    </div>
+
+    <div id="story" class="story" style="display: none;"></div>
+    <div id="choices" class="choices" style="display: none;"></div>
+  </div>
+
+  <script>
+    const storyEl = document.getElementById("story");
+    const choicesEl = document.getElementById("choices");
+
+    const storyNodes = [
+      {
+        id: 1,
+        text: "Berlin, 1962. Your team has intercepted intel suggesting a rogue general is planning to detonate a false-flag bomb to ignite WWIII. You must locate the device and stop it in time.",
+        choices: [
+          { text: "Split up and gather intel", nextText: 2 },
+          { text: "Stick together and tail the general", nextText: 3 }
+        ]
+      },
+      {
+        id: 2,
+        text: "Each agent moves into different sectors of Berlin. Agent Echo overhears a conversation in a café about a military truck delivery. Agent Cipher decodes a message hinting at a weapons lab.",
+        choices: [
+          { text: "Regroup and compare intel", nextText: 4 },
+          { text: "Follow the truck separately", nextText: 5 }
+        ]
+      },
+      {
+        id: 3,
+        text: "The general notices your presence. You lose the trail but intercept a briefcase with partial bomb blueprints inside.",
+        choices: [
+          { text: "Use Cipher to analyze blueprints", nextText: 4 },
+          { text: "Search surrounding area for the lab", nextText: 6 }
+        ]
+      },
+      {
+        id: 4,
+        text: "Combining intel, you narrow the location down to an abandoned factory near the Wall. A guard patrols the entrance.",
+        choices: [
+          { text: "Agent Blaze stealths inside", nextText: 7 },
+          { text: "Agent Vesper bluffs entry with old KGB badge", nextText: 8 }
+        ]
+      },
+      {
+        id: 5,
+        text: "The truck leads to an underground bunker. But without backup, Agent Echo is captured. Mission compromised.",
+        choices: [
+          { text: "Restart Mission", nextText: 1 }
+        ]
+      },
+      {
+        id: 6,
+        text: "Your search leads to a decoy site. Time is running out. You must regroup.",
+        choices: [
+          { text: "Regroup and reassess", nextText: 4 }
+        ]
+      },
+      {
+        id: 7,
+        text: "Inside, Agent Blaze disables two guards and finds the bomb wired to detonate in 10 minutes.",
+        choices: [
+          { text: "Agent Cipher disarms using code", nextText: 9 },
+          { text: "Try cutting wires manually", nextText: 10 }
+        ]
+      },
+      {
+        id: 8,
+        text: "Agent Vesper convinces the guards with her cover story. The team gets inside and finds the bomb timer.",
+        choices: [
+          { text: "Use Cipher to disarm it", nextText: 9 },
+          { text: "Call headquarters for help", nextText: 11 }
+        ]
+      },
+      {
+        id: 9,
+        text: "Agent Cipher decodes the circuit logic and stops the timer with 12 seconds left. The world breathes a little easier.",
+        choices: [
+          { text: "Play Again", nextText: 1 }
+        ]
+      },
+      {
+        id: 10,
+        text: "Wrong wire. The bomb detonates. Mission failed.",
+        choices: [
+          { text: "Retry from factory", nextText: 4 } 
+        ]
+      },
+      {
+        id: 11,
+        text: "Too late. HQ can’t reach you in time. Boom.",
+        choices: [
+          { text: "Retry from factory", nextText: 4 }
+        ]
+      }
+    ];
+
+    function startGame() {
+      document.getElementById("intro").style.display = "none";
+      storyEl.style.display = "block";
+      choicesEl.style.display = "block";
+      showTextNode(1);
+    }
+
+    function showTextNode(id) {
+      const node = storyNodes.find(n => n.id === id);
+      storyEl.innerText = node.text;
+      choicesEl.innerHTML = "";
+      node.choices.forEach(choice => {
+        const button = document.createElement("button");
+        button.innerText = choice.text;
+        button.onclick = () => showTextNode(choice.nextText);
+        choicesEl.appendChild(button);
+      });
+    }
+  </script>
+</body>
+</html>
